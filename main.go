@@ -20,7 +20,7 @@ func main() {
 	}
 	encoded, data := encoder.Encode()
 	encoder.CalculateMetrics()
-	fmt.Println(encoded)
+	fmt.Println("Encoded message: ", encoded)
 	fmt.Println(data)
 	//encodedMsg, codeMap, err := encoder.Process()
 	//if err != nil {

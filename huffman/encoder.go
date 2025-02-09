@@ -15,7 +15,7 @@ import (
 type Data struct {
 	Symbol      rune
 	Probability float64
-	Code        []byte
+	Code        string
 }
 
 type Encoder struct {
@@ -25,7 +25,7 @@ type Encoder struct {
 	symbolData []Data
 
 	encoded string
-	codeMap map[rune][]byte
+	codeMap map[rune]string
 
 	entropy   float64
 	avgLength float64
@@ -34,7 +34,7 @@ type Encoder struct {
 func NewEncoder(inputFile string) (*Encoder, error) {
 	encoder := Encoder{
 		inputFile: inputFile,
-		codeMap:   make(map[rune][]byte),
+		codeMap:   make(map[rune]string),
 	}
 	if err := encoder.parseInput(); err != nil {
 		return nil, err
@@ -94,16 +94,14 @@ func (e *Encoder) Encode() (string, []Data) {
 			combined.Items = append(combined.Items, lowest.Items...)
 
 			for _, item := range lowest.Items {
-				e.symbolData[item].Code = append(e.symbolData[item].Code, byte(i))
+				e.symbolData[item].Code += string(getChar(i))
 			}
 		}
 		heap.Push(&pq, &combined)
 	}
 
 	for _, d := range e.symbolData {
-		for i := 0; i < len(d.Code)/2; i++ {
-			d.Code[i], d.Code[len(d.Code)-i-1] = d.Code[len(d.Code)-i-1], d.Code[i]
-		}
+		reverse(&d.Code)
 	}
 
 	// map symbols to codes
@@ -112,27 +110,11 @@ func (e *Encoder) Encode() (string, []Data) {
 	}
 
 	// Encode message
-	var encoded []byte
 	for _, char := range e.message {
-		for _, code := range e.codeMap[char] {
-			encoded = append(encoded, getChar(int(code)))
-		}
+		e.encoded += e.codeMap[char]
 	}
-	e.encoded = string(encoded)
 
 	return e.encoded, e.symbolData
-}
-
-func mod(a, b int) int {
-	// to ensure positive mod result
-	return (a%b + b) % b
-}
-
-func getChar(i int) byte {
-	if i < 10 {
-		return byte(i + 0x30)
-	}
-	return byte(i - 9 + 0x60)
 }
 
 func (e *Encoder) parseInput() error {
@@ -174,4 +156,24 @@ func (e *Encoder) parseInput() error {
 		})
 	}
 	return nil
+}
+
+func mod(a, b int) int {
+	// to ensure positive mod result
+	return (a%b + b) % b
+}
+
+func getChar(i int) rune {
+	if i < 10 {
+		return rune(i + 0x30)
+	}
+	return rune(i - 9 + 0x60)
+}
+
+func reverse(s *string) {
+	r := []rune(*s)
+	for i, j := 0, len(r)-1; i < len(r)/2; i, j = i+1, j-1 {
+		r[i], r[j] = r[j], r[i]
+	}
+	*s = string(r)
 }
