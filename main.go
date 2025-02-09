@@ -20,16 +20,12 @@ func main() {
 	}
 	encoded, data := encoder.Encode()
 	encoder.CalculateMetrics()
-	fmt.Println("Encoded message: ", encoded)
-	fmt.Println(data)
-	//encodedMsg, codeMap, err := encoder.Process()
-	//if err != nil {
-	//	log.Fatalf("Processing failed: %v", err)
-	//}
-	//
-	//fmt.Printf("Original message length: %d\n", len(encoder.Message()))
-	//fmt.Printf("Original message: %q\n", encoder.Message())
-	//fmt.Printf("Encoded message length: %d\n", len(encodedMsg))
-	//fmt.Printf("Encoded message: %q\n", encodedMsg)
-	//fmt.Printf("Number of unique symbols: %d\n", len(codeMap))
+	fmt.Printf("Encoded message:\n%q\n", encoded)
+
+	decoder := huffman.NewDecoder(encoded, data)
+	decoded, err := decoder.Decode()
+	if err != nil {
+		log.Fatalf("Error decoding message: %v", err)
+	}
+	fmt.Printf("Decoded message:\n%q\n", decoded)
 }
