@@ -100,12 +100,10 @@ func (e *Encoder) Encode() (string, []Data) {
 		heap.Push(&pq, &combined)
 	}
 
-	for _, d := range e.symbolData {
-		reverse(&d.Code)
-	}
-
 	// map symbols to codes
-	for _, d := range e.symbolData {
+	for i := 0; i < len(e.symbolData); i++ {
+		d := &e.symbolData[i]
+		reverse(&d.Code)
 		e.codeMap[d.Symbol] = d.Code
 	}
 
