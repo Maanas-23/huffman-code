@@ -1,0 +1,7 @@
+3
+hello this is
+an input message
+that is
+to
+be encoded
+and now it's even longer
