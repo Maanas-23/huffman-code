@@ -44,11 +44,9 @@ func NewEncoder(inputFile string) (*Encoder, error) {
 }
 
 func (e *Encoder) CalculateMetrics() {
-	totalCodeLength := 0
-	for _, code := range e.codeMap {
-		totalCodeLength += len(code)
+	for _, d := range e.symbolData {
+		e.avgLength += d.Probability * float64(len(d.Code))
 	}
-	e.avgLength = float64(totalCodeLength) / float64(len(e.codeMap))
 
 	e.entropy = 0.0
 	for _, d := range e.symbolData {
@@ -56,8 +54,9 @@ func (e *Encoder) CalculateMetrics() {
 	}
 	e.entropy /= math.Log(float64(e.base))
 
-	fmt.Println("Avg Code length: ", e.avgLength)
-	fmt.Println("Entropy: ", e.entropy)
+	fmt.Printf("Avg Code length: %.4f\n", e.avgLength)
+	fmt.Printf("Entropy: %.4f\n", e.entropy)
+	fmt.Printf("Efficiency: %.4f\n\n", e.entropy/e.avgLength)
 }
 
 func (e *Encoder) Encode() (string, []Data) {
