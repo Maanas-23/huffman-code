@@ -54,9 +54,10 @@ func (e *Encoder) CalculateMetrics() {
 	}
 	e.entropy /= math.Log(float64(e.base))
 
-	fmt.Printf("Avg Code length: %.4f\n", e.avgLength)
+	fmt.Println()
+	fmt.Printf("Average length: %.4f\n", e.avgLength)
 	fmt.Printf("Entropy: %.4f\n", e.entropy)
-	fmt.Printf("Efficiency: %.4f\n\n", e.entropy/e.avgLength)
+	fmt.Printf("Efficiency: %.4f\n", e.entropy/e.avgLength)
 }
 
 func (e *Encoder) Encode() (string, []Data) {

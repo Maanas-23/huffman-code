@@ -19,7 +19,6 @@ func NewDecoder(encoded string, symbolData []Data) *Decoder {
 	decoder.symbolMap = make(map[string]rune)
 	for _, symbol := range symbolData {
 		decoder.symbolMap[symbol.Code] = symbol.Symbol
-		fmt.Printf("%q: %.4f\t%s\n", symbol.Symbol, symbol.Probability, symbol.Code)
 	}
 
 	return &decoder
