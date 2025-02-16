@@ -163,9 +163,9 @@ func mod(a, b int) int {
 
 func getChar(i int) rune {
 	if i < 10 {
-		return rune(i + 0x30)
+		return rune(i + '0')
 	}
-	return rune(i - 9 + 0x60)
+	return rune(i - 9 + 'A')
 }
 
 func reverse(s *string) {
